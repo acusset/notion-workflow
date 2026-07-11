@@ -1,4 +1,9 @@
-import { Env, ShopeeProductSyncWorkflow } from './workflow';
+import { ShopeeProductSyncWorkflow } from './workflow';
+
+export type Env = {
+	// Add your bindings here, e.g. Workers KV, D1, Workers AI, etc.
+	MY_WORKFLOW: Workflow;
+};
 
 export { ShopeeProductSyncWorkflow };
 

@@ -1,9 +1,5 @@
 import { WorkflowEntrypoint, WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-
-export type Env = {
-	// Add your bindings here, e.g. Workers KV, D1, Workers AI, etc.
-	MY_WORKFLOW: Workflow;
-};
+import type { Env } from '.';
 
 // User-defined params passed to your workflow
 type Params = {
