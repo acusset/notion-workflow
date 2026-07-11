@@ -1,84 +1,30 @@
-# Cloudflare Workflows
+# Recipe Crawler → Notion
 
-This is the starter template for Workflows, a durable execution engine built on top of Cloudflare Workers.
+A Cloudflare Workflow that turns a link into a saved recipe. Point it at a web page or a video (YouTube, Instagram, TikTok, etc.), and it crawls the content, extracts the recipe, and writes it into a Notion database.
 
-* Clone this repository to get started with Workflows
-* Read the [Workflows announcement blog](https://blog.cloudflare.com/building-workflows-durable-execution-on-workers/) to learn more about what Workflows is and how to build durable, multi-step applications using the Workflows model.
-* Review the [Workflows developer documentation](https://developers.cloudflare.com/workflows/) to dive deeper into the Workflows API and how it works.
+## How it works
 
-## Usage
+1. **Crawl** — fetch the source content from the given URL. For web pages this means the page content; for video platforms this means metadata, captions/transcript, and/or description text.
+2. **Extract** — use an LLM to parse the crawled content into a structured recipe: title, ingredients, steps, servings, timing, source URL, etc.
+3. **Save** — upsert the recipe into a Notion database, so it can be found and cooked from later.
 
-**Visit the [get started guide](https://developers.cloudflare.com/workflows/get-started/guide/) for Workflows to create and deploy your first Workflow.**
+Each stage runs as a durable step in a Cloudflare Workflow, so the pipeline can retry failed steps (e.g. a flaky crawl or a rate-limited API call) without re-running the whole thing.
 
-### Deploy it
+## Stack
 
-Deploy it to your own Cloudflare account directly:
+- **Cloudflare Workflows** — durable, multi-step execution
+- **Vercel AI SDK** (`ai`) — LLM-based recipe extraction
+- **Notion API** — recipe storage
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/workflows-starter)
-
-You can also create a project using this template by using `npm create cloudflare@latest`:
-
-```sh
-npm create cloudflare@latest workflows-starter -- --template "cloudflare/workflows-starter"
-```
-
-This will automatically clone this repository, install the dependencies, and prompt you to optionally deploy:
+## Development
 
 ```sh
-╭ Create an application with Cloudflare Step 1 of 3
-│
-├ In which directory do you want to create your application?
-│ dir ./workflows-tutorial
-│
-├ What would you like to start with?
-│ category Template from a GitHub repo
-│
-├ What's the url of git repo containing the template you'd like to use?
-│ repository cloudflare/workflows-starter
-│
-├ Cloning template from: cloudflare/workflows-starter
-│
-├ template cloned and validated
-│
-├ Copying template files
-│ files copied to project directory
-│
-├ Installing dependencies
-│ installed via `npm install`
-│
-╰ Application created
-
-╭ Configuring your application for Cloudflare Step 2 of 3
-│
-├ Installing @cloudflare/workers-types
-│ installed via npm
-│
-├ Adding latest types to `tsconfig.json`
-│ added @cloudflare/workers-types/2023-07-01
-│
-├ Do you want to use git for version control?
-│ yes git
-│
-├ Initializing git repo
-│ initialized git
-│
-├ Committing new files
-│ git commit
-│
-╰ Application configured
-
-╭ Deploy with Cloudflare Step 3 of 3
-│
-├ Do you want to deploy your application?
-│ no deploy via `npm run deploy`
-│
-╰ Done
-
-────────────────────────────────────────────────────────────
-🎉  SUCCESS  Application created successfully!
+pnpm install
+pnpm start    # wrangler dev — run the workflow locally
+pnpm deploy   # wrangler deploy
 ```
 
-The [Workflows documentation](https://developers.cloudflare.com/workflows/) contains examples, the API reference, and architecture guidance.
+Workflow bindings live in `wrangler.jsonc`; run `npx wrangler types` after changing them.
 
 ## CI/CD deployment
 

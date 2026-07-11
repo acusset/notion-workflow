@@ -1,6 +1,7 @@
 {
   "name": "notion-workflow",
   "version": "0.0.1",
+  "description": "Cloudflare Workflow that crawls a web page or video, extracts a recipe with an LLM, and saves it to Notion.",
   "scripts": {
     "build": "echo 'No build step required for Workflows'",
     "deploy": "wrangler deploy",
