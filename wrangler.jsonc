@@ -27,8 +27,8 @@
 			"name": "notion-workflow",
 			// binding name env.MYWORKFLOW
 			"binding": "MY_WORKFLOW",
-			// this is class that extends the Workflow class in src/index.ts
-			"class_name": "MyWorkflow",
+			// this is class that extends the Workflow class in src/workflow.ts
+			"class_name": "ShopeeProductSyncWorkflow",
 		},
 	],
 	// </docs-tag name="workflows-binding-wrangler.json">
