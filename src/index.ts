@@ -1,4 +1,5 @@
 // <docs-tag name="full-workflow-example">
+// CI/CD connection test: verifying Cloudflare Workers Builds triggers on push to main.
 import { WorkflowEntrypoint, WorkflowStep, WorkflowEvent } from 'cloudflare:workers';
 
 type Env = {
