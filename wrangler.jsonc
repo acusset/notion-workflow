@@ -10,7 +10,13 @@
 	"main": "src/index.ts",
 	"compatibility_date": "2024-10-22",
 	"observability": {
-		"enabled": true
+		"logs": {
+			"enabled": true,
+			"invocation_logs": true,
+		},
+		"traces": {
+			"enabled": false,
+		},
 	},
 	"workers_dev": true,
 	"preview_urls": true,
@@ -22,14 +28,12 @@
 			// binding name env.MYWORKFLOW
 			"binding": "MY_WORKFLOW",
 			// this is class that extends the Workflow class in src/index.ts
-			"class_name": "MyWorkflow"
-		}
+			"class_name": "MyWorkflow",
+		},
 	],
 	// </docs-tag name="workflows-binding-wrangler.json">
 	"upload_source_maps": true,
-	"compatibility_flags": [
-		"nodejs_compat"
-	]
+	"compatibility_flags": ["nodejs_compat"],
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
