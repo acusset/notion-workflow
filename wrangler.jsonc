@@ -12,6 +12,8 @@
 	"observability": {
 		"enabled": true
 	},
+	"workers_dev": true,
+	"preview_urls": true,
 	// <docs-tag name="workflows-binding-wrangler.json">
 	"workflows": [
 		{
