@@ -16,5 +16,9 @@
   "packageManager": "pnpm@9.1.4",
   "engines": {
     "pnpm": "^9.1.4"
+  },
+  "dependencies": {
+    "@notionhq/client": "^5.23.1",
+    "ai": "^7.0.22"
   }
 }
