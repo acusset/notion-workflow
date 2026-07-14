@@ -1,9 +1,11 @@
-import { NotionRecipeBookWorkflowParams } from "./workflow";
+import { NotionRecipeBookWorkflow, NotionRecipeBookWorkflowParams } from "./workflow";
 
 export type Env = {
 	RECIPE_WORKFLOW: Workflow<NotionRecipeBookWorkflowParams>;
 	ANTHROPIC_API_KEY: string;
 };
+
+export { NotionRecipeBookWorkflow };
 
 export default {
 	async fetch(req: Request, env: Env): Promise<Response> {
