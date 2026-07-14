@@ -15,6 +15,9 @@ export class NotionRecipeBookWorkflow extends WorkflowEntrypoint<Env, NotionReci
 			const { text } = await generateText({
 				model: openai('gpt-5-mini'),
 				prompt: `Fetch ${event.payload.url.toString()} and return basic information about the recipe found there: title, ingredients, and steps.`,
+				tools: {
+					web_search: openai.tools.webSearch(),
+				}
 			});
 			return text;
 		});
@@ -22,4 +25,3 @@ export class NotionRecipeBookWorkflow extends WorkflowEntrypoint<Env, NotionReci
 		return recipeSummary;
 	}
 }
- 
