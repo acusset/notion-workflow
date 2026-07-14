@@ -1,11 +1,9 @@
-import { ShopeeProductSyncWorkflow } from './workflow';
+import { NotionRecipeBookWorkflowParams } from "./workflow";
 
 export type Env = {
-	// Add your bindings here, e.g. Workers KV, D1, Workers AI, etc.
-	MY_WORKFLOW: Workflow;
+	RECIPE_WORKFLOW: Workflow<NotionRecipeBookWorkflowParams>;
+	ANTHROPIC_API_KEY: string;
 };
-
-export { ShopeeProductSyncWorkflow };
 
 export default {
 	async fetch(req: Request, env: Env): Promise<Response> {
@@ -15,24 +13,27 @@ export default {
 			return Response.json({}, { status: 404 });
 		}
 
-		// Get the status of an existing instance, if provided
-		// GET /?instanceId=<id here>
 		let id = url.searchParams.get('instanceId');
 		if (id) {
-			let instance = await env.MY_WORKFLOW.get(id);
+			let instance = await env.RECIPE_WORKFLOW.get(id);
 			return Response.json({
 				status: await instance.status(),
 			});
 		}
 
-		// Spawn a new instance and return the ID and status
-		let instance = await env.MY_WORKFLOW.create();
-		// You can also set the ID to match an ID in your own system
-		// and pass an optional payload to the Workflow
-		// let instance = await env.MY_WORKFLOW.create({
-		// 	id: 'id-from-your-system',
-		// 	params: { payload: 'to send' },
-		// });
+		let resource = url.searchParams.get('resource');
+		if (!resource) {
+			return Response.json({
+				error: 'Missing resource parameter',
+			}, { status: 400 });
+		}
+
+		let instance = await env.RECIPE_WORKFLOW.create({
+			params: {
+				url: new URL(resource),
+			},
+		});
+
 		return Response.json({
 			id: instance.id,
 			details: await instance.status(),

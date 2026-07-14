@@ -18,7 +18,8 @@
     "pnpm": "^9.1.4"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^4.0.14",
     "@notionhq/client": "^5.23.1",
-    "ai": "^7.0.22"
+    "ai": "^7.0.26"
   }
 }
