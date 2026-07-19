@@ -1,4 +1,5 @@
 import { NotionRecipeBookWorkflow, NotionRecipeBookWorkflowParams } from "./workflow";
+import homePage from "./home.html";
 
 export type Env = {
 	RECIPE_WORKFLOW: Workflow<NotionRecipeBookWorkflowParams>;
@@ -15,6 +16,10 @@ export default {
 
 		if (url.pathname.startsWith('/favicon')) {
 			return Response.json({}, { status: 404 });
+		}
+
+		if (url.pathname === '/') {
+			return new Response(homePage, { headers: { 'content-type': 'text/html;charset=UTF-8' } });
 		}
 
 		let id = url.searchParams.get('instanceId');
