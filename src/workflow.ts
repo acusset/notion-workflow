@@ -37,7 +37,7 @@ export class NotionRecipeBookWorkflow extends WorkflowEntrypoint<Env, NotionReci
 
 		const recipe = await step.do('Use Claude to fetch resource', async () => {
 			const openai = createOpenAI({ apiKey: this.env.OPENAI_API_KEY });
-			const prompt = `Fetch "${event.payload.url.toString()}" and extract the recipe found there. Find a proper dish name to use as title, without the site name or a trailing "Recipe" suffix. Include the URL of the recipe's main photo if one is available or the best suitable image.`;
+			const prompt = `Fetch "${event.payload.url.toString()}" and extract the recipe found there. Find a proper dish name to use as title, without the site name or a trailing "Recipe" suffix. Everything should be converted in grams. Include the URL of the recipe's main photo if one is available or the best suitable image.`;
 			const { output } = await generateText({
 				model: openai('gpt-5-mini'),
 				prompt,
