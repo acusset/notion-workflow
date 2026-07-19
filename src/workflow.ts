@@ -26,7 +26,7 @@ export class NotionRecipeBookWorkflow extends WorkflowEntrypoint<Env, NotionReci
 			return { ...output, link: output.link ?? event.payload.url.toString() };
 		});
 
-		const pageId = await step.do('Create Notion recipe entry', async () => {
+		const dataSourceId = await step.do('Look up recipe database', async () => {
 			const notion = new Client({ auth: this.env.NOTION_API_KEY });
 
 			const database = await notion.databases.retrieve({ database_id: this.env.RECIPE_BOOK_DATABASE_ID });
@@ -34,6 +34,25 @@ export class NotionRecipeBookWorkflow extends WorkflowEntrypoint<Env, NotionReci
 			if (!dataSourceId) {
 				throw new Error(`Database ${this.env.RECIPE_BOOK_DATABASE_ID} has no data sources`);
 			}
+			return dataSourceId;
+		});
+
+		const existingPageId = await step.do('Check if recipe already exists', async () => {
+			const notion = new Client({ auth: this.env.NOTION_API_KEY });
+
+			const { results } = await notion.dataSources.query({
+				data_source_id: dataSourceId,
+				filter: { property: 'Link', url: { equals: recipe.link } },
+			});
+			return results[0]?.id ?? null;
+		});
+
+		if (existingPageId) {
+			return { recipe, pageId: existingPageId, alreadyExists: true };
+		}
+
+		const pageId = await step.do('Create Notion recipe entry', async () => {
+			const notion = new Client({ auth: this.env.NOTION_API_KEY });
 
 			const page = await notion.pages.create({
 				parent: { data_source_id: dataSourceId },
@@ -44,6 +63,6 @@ export class NotionRecipeBookWorkflow extends WorkflowEntrypoint<Env, NotionReci
 			return page.id;
 		});
 
-		return { recipe, pageId };
+		return { recipe, pageId, alreadyExists: false };
 	}
 }
