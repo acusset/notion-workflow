@@ -1,6 +1,6 @@
 import { createOpenAI } from '@ai-sdk/openai';
-import { generateText, Output } from 'ai';
 import { Client } from '@notionhq/client';
+import { generateText, Output } from 'ai';
 import { WorkflowEntrypoint, WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import type { Env } from '.';
 import { RECIPE_BOOK_DATABASE_ID, RecipeEntrySchema, toNotionChildren, toNotionProperties } from './recipeSchema';

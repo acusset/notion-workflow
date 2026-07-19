@@ -34,7 +34,7 @@ export const RecipeEntrySchema = z.object({
 	/** Recipe title */
 	name: z.string().min(1),
 	/** Source URL */
-	link: z.url().optional(),
+	link: z.string().optional(),
 	/** Star rating */
 	starRating: StarRatingSchema.optional(),
 	/** Category / cuisine tags */
