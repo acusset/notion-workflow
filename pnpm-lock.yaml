@@ -20,6 +20,9 @@ importers:
       ai:
         specifier: ^7.0.26
         version: 7.0.26(zod@4.4.3)
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^5.20260710.1

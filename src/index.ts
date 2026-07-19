@@ -3,6 +3,7 @@ import { NotionRecipeBookWorkflow, NotionRecipeBookWorkflowParams } from "./work
 export type Env = {
 	RECIPE_WORKFLOW: Workflow<NotionRecipeBookWorkflowParams>;
 	OPENAI_API_KEY: string;
+	NOTION_API_KEY: string;
 };
 
 export { NotionRecipeBookWorkflow };
