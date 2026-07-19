@@ -2,8 +2,6 @@ import type { BlockObjectRequest } from '@notionhq/client/build/src/api-endpoint
 import type { CreatePageParameters } from '@notionhq/client/build/src/api-endpoints/pages';
 import { z } from 'zod';
 
-export const RECIPE_BOOK_DATABASE_ID = 'a0c47d4a-caf8-4a0d-aae8-beeac9c0e9bc';
-
 export const StarRatingSchema = z.enum(['★★★★★', '★★★★', '★★★', '★★', '★']);
 
 export const TagSchema = z.enum([
@@ -31,10 +29,12 @@ export const TagSchema = z.enum([
 
 export const RecipeEntrySchema = z.object({
 	// --- Database properties ---
-	/** Recipe title */
+	/** Recipe title only — no site name, domain, or trailing "Recipe" suffix (e.g. "Crispy Shredded Hash Browns", not "Crispy Shredded Hash Browns Recipe (seriouseats.com)") */
 	name: z.string().min(1),
 	/** Source URL */
 	link: z.string().nullable(),
+	/** URL of a photo of the finished dish, used as the page cover */
+	image: z.string().nullable(),
 	/** Star rating */
 	starRating: StarRatingSchema.nullable(),
 	/** Category / cuisine tags */
@@ -56,6 +56,12 @@ export const RecipeEntrySchema = z.object({
 export type RecipeEntry = z.infer<typeof RecipeEntrySchema>;
 
 type NotionPageProperties = NonNullable<CreatePageParameters['properties']>;
+type NotionPageCover = CreatePageParameters['cover'];
+
+/** Converts a validated RecipeEntry into the `cover` shape for `notion.pages.create()` */
+export function toNotionCover(recipe: RecipeEntry): NotionPageCover {
+	return recipe.image != null ? { type: 'external', external: { url: recipe.image } } : undefined;
+}
 
 /** Converts a validated RecipeEntry into the `properties` shape for `notion.pages.create()` */
 export function toNotionProperties(recipe: RecipeEntry): NotionPageProperties {

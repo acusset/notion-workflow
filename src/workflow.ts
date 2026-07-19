@@ -3,7 +3,7 @@ import { Client } from '@notionhq/client';
 import { generateText, Output } from 'ai';
 import { WorkflowEntrypoint, WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import type { Env } from '.';
-import { RECIPE_BOOK_DATABASE_ID, RecipeEntrySchema, toNotionChildren, toNotionProperties } from './recipeSchema';
+import { RecipeEntrySchema, toNotionChildren, toNotionCover, toNotionProperties } from './recipeSchema';
 
 // User-defined params passed to your workflow
 export type NotionRecipeBookWorkflowParams = {
@@ -14,7 +14,7 @@ export class NotionRecipeBookWorkflow extends WorkflowEntrypoint<Env, NotionReci
 	async run(event: WorkflowEvent<NotionRecipeBookWorkflowParams>, step: WorkflowStep) {
 		const recipe = await step.do('Use Claude to fetch resource', async () => {
 			const openai = createOpenAI({ apiKey: this.env.OPENAI_API_KEY });
-			const prompt = `Fetch "${event.payload.url.toString()}" and extract the recipe found there.`;
+			const prompt = `Fetch "${event.payload.url.toString()}" and extract the recipe found there. Find a proper dish name to use as title, without the site name or a trailing "Recipe" suffix. Include the URL of the recipe's main photo if one is available or the best suitable image.`;
 			const { output } = await generateText({
 				model: openai('gpt-5-mini'),
 				prompt,
@@ -29,15 +29,16 @@ export class NotionRecipeBookWorkflow extends WorkflowEntrypoint<Env, NotionReci
 		const pageId = await step.do('Create Notion recipe entry', async () => {
 			const notion = new Client({ auth: this.env.NOTION_API_KEY });
 
-			const database = await notion.databases.retrieve({ database_id: RECIPE_BOOK_DATABASE_ID });
+			const database = await notion.databases.retrieve({ database_id: this.env.RECIPE_BOOK_DATABASE_ID });
 			const dataSourceId = 'data_sources' in database ? database.data_sources[0]?.id : undefined;
 			if (!dataSourceId) {
-				throw new Error(`Database ${RECIPE_BOOK_DATABASE_ID} has no data sources`);
+				throw new Error(`Database ${this.env.RECIPE_BOOK_DATABASE_ID} has no data sources`);
 			}
 
 			const page = await notion.pages.create({
 				parent: { data_source_id: dataSourceId },
 				properties: toNotionProperties(recipe),
+				cover: toNotionCover(recipe),
 				children: toNotionChildren(recipe),
 			});
 			return page.id;

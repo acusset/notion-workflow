@@ -51,7 +51,9 @@
 	 * Note: Use secrets to store sensitive data.
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
 	 */
-	// "vars": {  "MY_VARIABLE": "production_value" }
+	"vars": {
+		"RECIPE_BOOK_DATABASE_ID": "a0c47d4a-caf8-4a0d-aae8-beeac9c0e9bc",
+	},
 	/**
 	 * Static Assets
 	 * https://developers.cloudflare.com/workers/static-assets/binding/

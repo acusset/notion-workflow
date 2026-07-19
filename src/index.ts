@@ -4,6 +4,7 @@ export type Env = {
 	RECIPE_WORKFLOW: Workflow<NotionRecipeBookWorkflowParams>;
 	OPENAI_API_KEY: string;
 	NOTION_API_KEY: string;
+	RECIPE_BOOK_DATABASE_ID: string;
 };
 
 export { NotionRecipeBookWorkflow };
