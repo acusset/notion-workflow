@@ -2,7 +2,7 @@ import type { BlockObjectRequest } from '@notionhq/client/build/src/api-endpoint
 import type { CreatePageParameters } from '@notionhq/client/build/src/api-endpoints/pages';
 import { z } from 'zod';
 
-export const RECIPE_BOOK_DATABASE_ID = '2274986d-44dd-4677-b1a4-01c57bfc8b2a';
+export const RECIPE_BOOK_DATABASE_ID = 'a0c47d4a-caf8-4a0d-aae8-beeac9c0e9bc';
 
 export const StarRatingSchema = z.enum(['★★★★★', '★★★★', '★★★', '★★', '★']);
 
