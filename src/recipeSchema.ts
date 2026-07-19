@@ -34,23 +34,23 @@ export const RecipeEntrySchema = z.object({
 	/** Recipe title */
 	name: z.string().min(1),
 	/** Source URL */
-	link: z.string().optional(),
+	link: z.string().nullable(),
 	/** Star rating */
-	starRating: StarRatingSchema.optional(),
+	starRating: StarRatingSchema.nullable(),
 	/** Category / cuisine tags */
-	tags: z.array(TagSchema).optional(),
+	tags: z.array(TagSchema).nullable(),
 	/** Human-readable total cooking time, e.g. "45 mins" */
-	totalTime: z.string().optional(),
+	totalTime: z.string().nullable(),
 	/** Number of servings */
-	yield: z.number().positive().optional(),
+	yield: z.number().positive().nullable(),
 
 	// --- Page body content ---
 	/** List of ingredients, each rendered as a bullet point */
-	ingredients: z.array(z.string().min(1)).optional(),
+	ingredients: z.array(z.string().min(1)).nullable(),
 	/** Step-by-step instructions, each rendered as a numbered list item */
-	instructions: z.array(z.string().min(1)).optional(),
+	instructions: z.array(z.string().min(1)).nullable(),
 	/** Free-form notes, tips, or variations */
-	notes: z.string().optional(),
+	notes: z.string().nullable(),
 });
 
 export type RecipeEntry = z.infer<typeof RecipeEntrySchema>;
